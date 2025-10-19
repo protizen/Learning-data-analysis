@@ -42,7 +42,13 @@ NSMC(ratings_train.txt, ratings_test.txt)를 이용해 한국어 텍스트 감�
    ```
 3. 실행 후 `tfidf.pkl`, `SA_lr_best.pkl` 파일이 생성됨.
 
-## 주의사항
-- Konlpy 사용 시 JVM 초기화 문제가 발생할 수 있으므로 `jpype.startJVM()`를 명시적으로 호출하세요.
-- `TfidfVectorizer`에 사용자 토크나이저를 쓸 때는 `token_pattern=None`을 지정해야 합니다.
-- 데이터 파일 인코딩이나 파일 경로가 다르면 `FileNotFoundError`가 발생합니다.
+## 웹에서 영화리뷰 API의 리뷰 내용을 위에서 생성한 모델로 추론 서비스 제작
+
+- Flask 기반 웹 애플리케이션으로 영화 리뷰를 불러와 감성분석 결과를 함께 보여줍니다.
+- TMDB API에서 영화 리뷰를 조회하며, 환경변수 TMDB_API_KEY를 사용하고 기본값을 제공합니다.
+- 불러온 리뷰는 Google Translate(공개 엔드포인트)를 이용해 한국어로 번역하고, 번역 실패 시 원문을 사용합니다.
+- 미리 학습된 TF-IDF 벡터화기(tfidf.pkl)와 로지스틱 회귀 모델(SA_lr_best.pkl)을 joblib로 로드합니다.
+- 토크나이저는 Konlpy의 Okt를 동일한 jvm 경로로 초기화하여 학습 시 사용한 함수(okt_tokenizer)를 재사용합니다.
+- 입력 텍스트는 한글/공백만 남기는 전처리 후 TF-IDF 변환을 거쳐 긍정/부정으로 분류합니다.
+- 루트 엔드포인트('/')는 쿼리 파라미터 limit으로 반환할 리뷰 수를 제어하며 기본값은 5입니다.
+- 실행: 모델 파일과 의존 패키지(Flask, requests, konlpy, joblib, scikit-learn 등)가 준비된 환경에서 python mv_review3.py로 실행합니다.
