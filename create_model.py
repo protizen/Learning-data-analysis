@@ -19,8 +19,7 @@ nsmc_test_df = nsmc_test_df[nsmc_test_df['document'].str.strip() != ""]
 
 # 모델 만들기
 from konlpy.tag import Okt
-#okt = Okt()
-okt = Okt(jvmpath="C:\\Program Files\\Microsoft\\jdk-11.0.28.6-hotspot\\bin\\server\\jvm.dll")
+okt = Okt()
 
 # 토큰화 함수 정의
 def okt_tokenizer(text):
@@ -78,3 +77,4 @@ if(st_predict == 0):
     print(st, '==> 부정 감성')
 else:
     print(st, '==> 긍정 감성')
+
