@@ -7,18 +7,17 @@ import re
 from konlpy.tag import Okt
 
 # Okt 초기화
-okt = Okt(jvmpath="C:\\Program Files\\Microsoft\\jdk-11.0.28.6-hotspot\\bin\\server\\jvm.dll")
+okt = Okt()
 
 # 토크나이저 함수 - 모델 생성 시 사용된 것과 동일한 함수
 def okt_tokenizer(text):
     tokens = okt.morphs(text)
     return tokens
 
-# 리뷰 텍스트 전처리 함수칟ㅁㄱ
 def preprocess_text(text):
     return re.sub(r'[^ ㄱ-ㅣ가-힣]+', ' ', text)
 
-# 감성 분석을 수행하는 함수
+# 감성 분석 수행 함수
 def analyze_sentiment(review, tfidf, model):
     processed_review = preprocess_text(review)
     review_tfidf = tfidf.transform([processed_review])
@@ -31,7 +30,7 @@ model = joblib.load('SA_lr_best.pkl')
 app = Flask(__name__)
 
 def get_movie_reviews(movie_id="76600", limit=None):
-    API_KEY = os.getenv("TMDB_API_KEY", "def6af42b36c8a1e6aa68734d5b9d394")
+    API_KEY = os.getenv("TMDB_API_KEY", "API_KEY")
     url = f"https://api.themoviedb.org/3/movie/{movie_id}/reviews"
     params = {"api_key": API_KEY}
     headers = {"accept": "application/json"}
@@ -46,7 +45,6 @@ def get_movie_reviews(movie_id="76600", limit=None):
                 if n >= 0:
                     results = results[:n]
             except Exception:
-                # limit 파싱 실패 시 무시하고 전체 반환
                 pass
         return results
     except requests.exceptions.HTTPError:
@@ -59,7 +57,7 @@ def get_movie_reviews(movie_id="76600", limit=None):
         print(f"에러 발생: {e}")
         return []
 
-# 새로 추가: 텍스트 목록을 받아 한국어로 번역해서 리스트로 반환
+# 텍스트 목록을 받아 한국어로 번역해서 리스트로 반환
 def translate_texts(texts, target_lang='ko'):
     translated = []
     for text in texts:
@@ -77,23 +75,21 @@ def translate_texts(texts, target_lang='ko'):
             r = requests.get("https://translate.googleapis.com/translate_a/single", params=params, timeout=5)
             r.raise_for_status()
             data = r.json()
-            # data[0]는 문장 조각 리스트. 첫 원소들을 이어붙임
             translated_text = ''.join([seg[0] for seg in data[0]]) if data and data[0] else text
             translated.append(translated_text)
         except Exception:
-            # 번역 실패 시 원문 유지
             translated.append(text)
     return translated
 
 @app.route('/')
 def index():
-    # 쿼리 파라미터로 ?limit=5 처럼 전달 가능. 기본 5개
+    # 기본 5개 리뷰만 진행
     limit_param = request.args.get('limit', '5')
     reviews = get_movie_reviews(limit=limit_param)
-    # 리뷰 내용만 추출해서 번역 시도
+    # 리뷰 내용 추출해서 번역
     contents = [r.get('content', '') for r in reviews]
     translated_contents = translate_texts(contents, 'ko')
-    # 각 리뷰에 content_ko 필드 추가
+    
     for r, t in zip(reviews, translated_contents):
         sentiment = analyze_sentiment(t, tfidf, model)
         r['content_ko'] = t + f" ({sentiment} 감성)"
@@ -102,3 +98,4 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
