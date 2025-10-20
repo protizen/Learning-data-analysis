@@ -5,16 +5,16 @@
 http://210.109.83.44:5000 (실시간 번역으로 초기 로드시 시간이 걸림)
 
 ## 목적
-NSMC(ratings_train.txt, ratings_test.txt)를 이용해 한국어 텍스트 감성(긍정/부정) 분류 모델을 학습하고 저장 및 예측하는 전체 파이프라인 정리.
+NSMC(ratings_train.txt, ratings_test.txt)를 이용해 한국어 텍스트 감성(긍정/부정) 분류 모델을 학습하고 저장하고 실제 영화리뷰 서비스 API르 활용하여 감성을 예측하는 서비스까지 구현
 
-## 전제조건
-- OS: Ubuntu 24.04.2 LTS (dev container)
+## 적용 시스템
+- OS: Ubuntu 22.04 LTS (카카오클라우드)
 - Python 패키지: pandas, scikit-learn, konlpy, jpype1, joblib, numpy
 - NSMC 데이터 위치: `/workspaces/Learning-data-analysis/data/ratings_train.txt`, `/workspaces/Learning-data-analysis/data/ratings_test.txt`
 
 ## 단계 요약
 1. 데이터 로드
-   - pandas로 TSV(ratings_*.txt)를 읽음(헤더 없음, 구분자 탭).
+   - pandas로 CSV(ratings_*.txt)를 읽음(헤더 없음, 구분자 탭).
 2. 전처리
    - `document` 열의 null 제거.
    - 한글(가-힣)과 공백 외 문자를 공백으로 치환.
