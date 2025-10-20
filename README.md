@@ -54,7 +54,7 @@ NSMC(ratings_train.txt, ratings_test.txt)를 이용해 한국어 텍스트 감�
 - 토크나이저는 Konlpy의 Okt를 동일한 jvm 경로로 초기화하여 학습 시 사용한 함수(okt_tokenizer)를 재사용합니다.
 - 입력 텍스트는 한글/공백만 남기는 전처리 후 TF-IDF 변환을 거쳐 긍정/부정으로 분류합니다.
 - 루트 엔드포인트('/')는 쿼리 파라미터 limit으로 반환할 리뷰 수를 제어하며 기본값은 5입니다.
-- 실행: 모델 파일과 의존 패키지(Flask, requests, konlpy, joblib, scikit-learn 등)가 준비된 환경에서 python movie_review_analysis.py로 실행합니다.
+- 실행: 모델 파일과 의존 패키지(Flask, requests, jdk, konlpy, joblib, scikit-learn 등)가 준비된 환경에서 python app.py로 실행합니다.
 
 <img width="858" height="604" alt="image" src="https://github.com/user-attachments/assets/3aaf13ba-e18f-49b5-b874-dafa0ddd77ae" />
 
