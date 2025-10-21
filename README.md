@@ -9,7 +9,7 @@ NSMC(ratings_train.txt, ratings_test.txt)를 이용해 한국어 텍스트 감�
 
 ## 적용 시스템
 - OS: Ubuntu 22.04 LTS (카카오클라우드)
-- Python 패키지: pandas, scikit-learn, konlpy, jpype1, joblib, numpy
+- Python 패키지: pandas, scikit-learn, jdk, konlpy, jpype1, joblib, numpy
 - NSMC 데이터 위치: `/workspaces/Learning-data-analysis/data/ratings_train.txt`, `/workspaces/Learning-data-analysis/data/ratings_test.txt`
 
 ## 단계 요약
