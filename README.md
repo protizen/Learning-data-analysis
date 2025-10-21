@@ -10,7 +10,7 @@ NSMC(ratings_train.txt, ratings_test.txt)를 이용해 한국어 텍스트 감�
 ## 적용 시스템
 - OS: Ubuntu 22.04 LTS (카카오클라우드)
 - Python 패키지: pandas, scikit-learn, jdk, konlpy, jpype1, joblib, numpy
-- NSMC 데이터 위치: `/workspaces/Learning-data-analysis/data/ratings_train.txt`, `/workspaces/Learning-data-analysis/data/ratings_test.txt`
+- NSMC 데이터 위치: `https://raw.githubusercontent.com/e9t/nsmc/master/ratings_train.txt`, `https://raw.githubusercontent.com/e9t/nsmc/master/ratings_test.txt`
 
 ## 단계 요약
 1. 데이터 로드
@@ -19,8 +19,7 @@ NSMC(ratings_train.txt, ratings_test.txt)를 이용해 한국어 텍스트 감�
    - `document` 열의 null 제거.
    - 한글(가-힣)과 공백 외 문자를 공백으로 치환.
    - 테스트 데이터에서 빈 문자열 행 제거.
-3. 토크나이저 설정
-   - jpype로 JVM을 명시적으로 시작(예: `jpype.getDefaultJVMPath()` 사용, `-Dfile.encoding=UTF-8` 추가).
+3. 토크나이저 설정   
    - Konlpy의 `Okt()` 초기화.
    - `okt.morphs`를 이용한 `okt_tokenizer(text)` 정의.
 4. 특징 벡터화
@@ -38,12 +37,11 @@ NSMC(ratings_train.txt, ratings_test.txt)를 이용해 한국어 텍스트 감�
    - 사용자 입력 문장 전처리(한글 추출, 공백 정리) → TF-IDF 변환 → 최적 모델로 예측(결과: "긍정"/"부정").
 
 ## 실행 예시
-1. 데이터 파일을 `.../data/`에 배치.
-2. 스크립트 실행:
+1. 스크립트 실행:
    ```
-   python /workspaces/Learning-data-analysis/create_model.py
+   python create_model.py
    ```
-3. 실행 후 `tfidf.pkl`, `SA_lr_best.pkl` 파일이 생성됨.
+2. 실행 후 `tfidf.pkl`, `SA_lr_best.pkl` 파일이 생성됨.
 
 ## 웹에서 영화리뷰 API의 리뷰 내용을 위에서 생성한 모델로 추론 서비스 제작
 
